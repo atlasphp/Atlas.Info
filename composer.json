@@ -13,7 +13,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "atlas/pdo": "3.x@dev"
+        "atlas/pdo": "1.x@dev"
     },
     "require-dev": {
         "pds/skeleton": "~1.0",
