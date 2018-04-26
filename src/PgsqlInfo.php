@@ -53,7 +53,7 @@ class PgsqlInfo extends Info
         );
 
         foreach ($cols as $name => $default) {
-            if (substr($default, 0, 9) == "nextval('"
+            if ($default !== null && substr($default, 0, 9) == "nextval('"
             ) {
                 $pos = strrpos($default, "'");
                 $end = strlen($default) - $pos;
