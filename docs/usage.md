@@ -75,13 +75,12 @@ Each element is itself an array, with the following keys:
 
 ## Fetching Auto-Increment Sequence Name
 
-To fetch the name of the primary key autoincrement sequence on a PostgreSQL table, call `fetchAutoincSequence()` with the table name.
+To fetch the name of the primary key autoincrement sequence on a PostgreSQL
+table, call `fetchAutoincSequence()` with the table name.
 
 ```php
-<?php
 $sequence = $info->fetchAutoincSequence('table_name');
 // => 'table_name_id_seq'
-?>
 ```
 
 On systems other than PostgreSQL, this will return `null`.
