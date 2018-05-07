@@ -1,7 +1,7 @@
 {
     "name": "atlas/info",
     "type": "library",
-    "description": "Schema information discovery.",
+    "description": "Uses an Atlas.Pdo connection to discover schema information.",
     "keywords": [
         "schema",
         "db",
@@ -13,7 +13,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.1",
-        "atlas/pdo": "1.x@dev"
+        "atlas/pdo": "~1.0"
     },
     "require-dev": {
         "pds/skeleton": "~1.0",
