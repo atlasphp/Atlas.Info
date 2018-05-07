@@ -40,7 +40,7 @@ $tableNames = $info->fetchTableNames('schema_name');
 To get an array of column definitions in a table, call `fetchColumns()`.
 
 ```php
-$columns = $info->fetchColumns('table_name'); // or 'schema_name.table_name'
+$columns = $info->fetchColumns('table_name');
 foreach ($columns as $name => $def) {
     echo "Column $name is of type "
        . $def['type']
@@ -49,6 +49,11 @@ foreach ($columns as $name => $def) {
        . PHP_EOL;
 }
 ```
+
+> **Tip:**
+>
+> You can use a schema prefix on the table name if you like, such as
+> 'schema_name.table_name'.
 
 Each element is itself an array, with the following keys:
 
