@@ -93,6 +93,10 @@ abstract class Info
         $columns = [];
         $defs = $this->connection->fetchAll($stm, ['schema' => $schema, 'table' => $table]);
         foreach ($defs as $def) {
+            if (isset($columns[$def['_name']])) {
+                $columns[$def['_name']]['primary'] = $columns[$def['_name']]['primary'] ?: (bool) $def['_primary'];
+                continue;
+            }
             $columns[$def['_name']] = [
                 'name' => $def['_name'],
                 'type' => $def['_type'],
