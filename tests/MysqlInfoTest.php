@@ -5,10 +5,15 @@ use Atlas\Info\InfoTest;
 
 class MysqlInfoTest extends InfoTest
 {
+    protected $schemaNameIssue3 = 'atlas_test_issue_3';
+    protected $tableIssue3Table1 = 'table_1';
+    protected $tableIssue3Table2 = 'table_2';
+
     protected function create()
     {
         $this->connection->query("CREATE DATABASE {$this->schemaName1}");
         $this->connection->query("CREATE DATABASE {$this->schemaName2}");
+        $this->connection->query("CREATE DATABASE {$this->schemaNameIssue3}");
 
         $this->connection->query("USE {$this->schemaName1}");
         $this->connection->query("
@@ -34,12 +39,27 @@ class MysqlInfoTest extends InfoTest
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             ) ENGINE=InnoDB
         ");
+
+        $this->connection->query("
+            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table1}(
+                fk_id CHAR(40),
+                PRIMARY KEY(fk_id)
+            ) ENGINE=INNODB;
+        ");
+        $this->connection->query("
+            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table2}(
+            fk_id CHAR(40),
+                PRIMARY KEY(fk_id),
+                FOREIGN KEY (fk_id) REFERENCES table_1(fk_id)
+            ) ENGINE=INNODB;
+        ");
     }
 
     protected function drop()
     {
         $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaName1}");
         $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaName2}");
+        $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaNameIssue3}");
     }
 
     public function provideFetchColumns()
@@ -116,10 +136,23 @@ class MysqlInfoTest extends InfoTest
                 'primary' => false
             ],
         ];
+        $issue3Columns = [
+            'fk_id' => [
+                'name' => 'fk_id',
+                'type' => 'char',
+                'size' => 40,
+                'scale' => null,
+                'notnull' => true,
+                'default' => null,
+                'autoinc' => false,
+                'primary' => true
+            ],
+        ];
 
         return [
             [$this->tableName, $columns],
             ["{$this->schemaName2}.{$this->tableName}", $columns],
+            ["{$this->schemaNameIssue3}.{$this->tableIssue3Table2}", $issue3Columns],
         ];
     }
 }
