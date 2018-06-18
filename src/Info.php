@@ -57,6 +57,8 @@ abstract class Info
         }
 
         $autoinc = $this->getAutoincSql();
+        $extended = $this->getExtendedSql();
+
         $stm = "
             SELECT
                 columns.column_name as _name,
@@ -75,7 +77,7 @@ abstract class Info
                 CASE
                     WHEN table_constraints.constraint_type = 'PRIMARY KEY' THEN 1
                     ELSE 0
-                END AS _primary
+                END AS _primary{$extended}
             FROM information_schema.columns
                 LEFT JOIN information_schema.key_column_usage
                     ON columns.table_schema = key_column_usage.table_schema
@@ -90,27 +92,41 @@ abstract class Info
             ORDER BY columns.ordinal_position
         ";
 
-        $columns = [];
         $defs = $this->connection->fetchAll($stm, ['schema' => $schema, 'table' => $table]);
-        foreach ($defs as $def) {
-            $columns[$def['_name']] = [
-                'name' => $def['_name'],
-                'type' => $def['_type'],
-                'size' => isset($def['_size']) ? (int) $def['_size'] : null,
-                'scale' => isset($def['_scale']) ? (int) $def['_scale'] : null,
-                'notnull' => (bool) $def['_notnull'],
-                'default' => $this->getDefault($def['_default']),
-                'autoinc' => (bool) $def['_autoinc'],
-                'primary' => (bool) $def['_primary']
-            ];
-        }
+        return $this->extractColumns($schema, $table, $defs);
+    }
 
+    protected function extractColumns(string $schema, string $table, array $defs) : array
+    {
+        $columns = [];
+        foreach ($defs as $def) {
+            $columns[$def['_name']] = $this->extractColumn($schema, $table, $def);
+        }
         return $columns;
+    }
+
+    protected function extractColumn(string $schema, string $table, array $def) : array
+    {
+        return [
+            'name' => $def['_name'],
+            'type' => $def['_type'],
+            'size' => isset($def['_size']) ? (int) $def['_size'] : null,
+            'scale' => isset($def['_scale']) ? (int) $def['_scale'] : null,
+            'notnull' => (bool) $def['_notnull'],
+            'default' => $this->getDefault($def['_default']),
+            'autoinc' => (bool) $def['_autoinc'],
+            'primary' => (bool) $def['_primary']
+        ];
     }
 
     public function fetchAutoincSequence(string $table) : ?string
     {
         return null;
+    }
+
+    protected function getExtendedSql() : string
+    {
+        return '';
     }
 
     abstract protected function getAutoincSql() : string;

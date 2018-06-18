@@ -41,35 +41,20 @@ class SqliteInfo extends Info
             $table = substr($table, $pos + 1);
         }
 
-        $create = $this->fetchCreateTable($schema, $table);
+        $qs = $this->quoteName($schema);
+        $qt = $this->quoteName($table);
+        $rows = $this->connection->fetchAll("PRAGMA {$qs}.table_info({$qt})");
+        return $this->extractColumns($schema, $table, $rows);
+    }
 
-        $schema = $this->quoteName($schema);
-        $table = $this->quoteName($table);
-        $rows = $this->connection->fetchAll("PRAGMA {$schema}.table_info({$table})");
-
+    protected function extractColumns(string $schema, string $table, array $rows) : array
+    {
         $info = [];
         foreach ($rows as $row) {
-            preg_match(
-                "/^([^\(]*)(\(([\d\s]+)(,([\d\s]+))?\))?/",
-                trim($row['type']),
-                $matches
-            );
-            $type = trim($matches[1]);
-            $size = isset($matches[3]) ? (int) $matches[3]: null;
-            $scale = isset($matches[5]) ? (int) $matches[5]: null;
-
-            $info[] = [
-                'name' => $row['name'],
-                'type' => $type,
-                'size' => $size,
-                'scale' => $scale,
-                'notnull' => (bool) ($row['notnull']),
-                'default' => $row['dflt_value'],
-                'autoinc' => null,
-                'primary' => (bool) ($row['pk']),
-            ];
+            $info[] = $this->extractColumn($schema, $table, $row);
         }
 
+        $create = $this->fetchCreateTable($schema, $table);
         $defs = [];
         while ($curr = array_shift($info)) {
             $this->fixDefault($curr, $create, current($info));
@@ -78,6 +63,29 @@ class SqliteInfo extends Info
         }
 
         return $defs;
+    }
+
+    protected function extractColumn(string $schema, string $table, array $row) : array
+    {
+        preg_match(
+            "/^([^\(]*)(\(([\d\s]+)(,([\d\s]+))?\))?/",
+            trim($row['type']),
+            $matches
+        );
+        $type = trim($matches[1]);
+        $size = isset($matches[3]) ? (int) $matches[3]: null;
+        $scale = isset($matches[5]) ? (int) $matches[5]: null;
+
+        return [
+            'name' => $row['name'],
+            'type' => $type,
+            'size' => $size,
+            'scale' => $scale,
+            'notnull' => (bool) ($row['notnull']),
+            'default' => $row['dflt_value'],
+            'autoinc' => null,
+            'primary' => (bool) ($row['pk']),
+        ];
     }
 
     protected function getAutoincSql() : string

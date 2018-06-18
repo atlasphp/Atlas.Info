@@ -13,7 +13,7 @@ class MysqlInfoTest extends InfoTest
         $this->connection->query("USE {$this->schemaName1}");
         $this->connection->query("
             CREATE TABLE {$this->tableName} (
-                id                     INTEGER AUTO_INCREMENT PRIMARY KEY,
+                id                     INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
                 test_size_scale        NUMERIC(7,3),
                 test_default_null      CHAR(3) DEFAULT NULL,
@@ -25,7 +25,7 @@ class MysqlInfoTest extends InfoTest
 
         $this->connection->query("
             CREATE TABLE {$this->schemaName2}.{$this->tableName} (
-                id                     INTEGER AUTO_INCREMENT PRIMARY KEY,
+                id                     INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
                 test_size_scale        NUMERIC(7,3),
                 test_default_null      CHAR(3) DEFAULT NULL,
@@ -47,7 +47,7 @@ class MysqlInfoTest extends InfoTest
         $columns = [
             'id' => [
                 'name' => 'id',
-                'type' => 'int',
+                'type' => 'int unsigned',
                 'size' => 10,
                 'scale' => 0,
                 'notnull' => true,

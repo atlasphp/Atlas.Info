@@ -25,6 +25,25 @@ class MysqlInfo extends Info
                 END";
     }
 
+    protected function getExtendedSql() : string
+    {
+        return ',
+                columns.column_type as _extended';
+    }
+
+    protected function extractColumn(string $schema, string $table, array $def) : array
+    {
+        $column = parent::extractColumn($schema, $table, $def);
+        $extended = $def['_extended'];
+
+        $pos = stripos($extended, 'unsigned');
+        if ($pos !== false) {
+            $column['type'] .= ' ' . substr($extended, $pos, 8);
+        }
+
+        return $column;
+    }
+
     protected function getDefault($default)
     {
         if ($default === null) {
