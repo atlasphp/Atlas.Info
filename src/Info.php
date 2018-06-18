@@ -100,6 +100,10 @@ abstract class Info
     {
         $columns = [];
         foreach ($defs as $def) {
+            if (isset($columns[$def['_name']])) {
+                $columns[$def['_name']]['primary'] = $columns[$def['_name']]['primary'] ?: (bool) $def['_primary'];
+                continue;
+            }
             $columns[$def['_name']] = $this->extractColumn($schema, $table, $def);
         }
         return $columns;

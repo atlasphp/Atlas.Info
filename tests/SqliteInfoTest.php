@@ -5,9 +5,14 @@ use Atlas\Info\InfoTest;
 
 class SqliteInfoTest extends InfoTest
 {
+    protected $schemaNameIssue3 = 'atlas_test_issue_3';
+    protected $tableIssue3Table1 = 'table_1';
+    protected $tableIssue3Table2 = 'table_2';
+
     protected function create()
     {
         $this->connection->query("ATTACH DATABASE ':memory:' AS {$this->schemaName2}");
+        $this->connection->query("ATTACH DATABASE ':memory:' AS {$this->schemaNameIssue3}");
 
         $this->connection->query("
             CREATE TABLE {$this->tableName} (
@@ -30,6 +35,20 @@ class SqliteInfoTest extends InfoTest
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ");
+
+        $this->connection->query("
+            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table1}(
+                fk_id CHAR(40),
+                PRIMARY KEY(fk_id)
+            )
+        ");
+        $this->connection->query("
+            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table2}(
+            fk_id CHAR(40),
+                PRIMARY KEY(fk_id),
+                FOREIGN KEY (fk_id) REFERENCES table_1(fk_id)
             )
         ");
     }
@@ -128,9 +147,23 @@ class SqliteInfoTest extends InfoTest
             ],
         ];
 
+        $issue3Columns = [
+            'fk_id' => [
+                'name' => 'fk_id',
+                'type' => 'CHAR',
+                'size' => 40,
+                'scale' => null,
+                'notnull' => false,
+                'default' => null,
+                'autoinc' => false,
+                'primary' => true
+            ],
+        ];
+
         return [
             [$this->tableName, $columns],
             ["{$this->schemaName2}.{$this->tableName}", $columns],
+            ["{$this->schemaNameIssue3}.{$this->tableIssue3Table2}", $issue3Columns],
         ];
     }
 }
