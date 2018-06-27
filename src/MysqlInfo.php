@@ -34,11 +34,19 @@ class MysqlInfo extends Info
     protected function extractColumn(string $schema, string $table, array $def) : array
     {
         $column = parent::extractColumn($schema, $table, $def);
-        $extended = $def['_extended'];
+        $extended = trim($def['_extended']);
 
         $pos = stripos($extended, 'unsigned');
         if ($pos !== false) {
             $column['type'] .= ' ' . substr($extended, $pos, 8);
+            return $column;
+        }
+
+        $pos = stripos($extended, 'enum');
+        if ($pos === 0) {
+            $input = trim(substr($extended, 4), '()');
+            $column['options'] = str_getcsv($input);
+            return $column;
         }
 
         return $column;

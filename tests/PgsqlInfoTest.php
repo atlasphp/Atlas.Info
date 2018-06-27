@@ -53,7 +53,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => true,
                 'default' => null,
                 'autoinc' => true,
-                'primary' => true
+                'primary' => true,
+                'options' => null,
             ],
             'name' => [
                 'name' => 'name',
@@ -63,7 +64,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => true,
                 'default' => null,
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
             'test_size_scale' => [
                 'name' => 'test_size_scale',
@@ -73,7 +75,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => false,
                 'default' => null,
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
             'test_default_null' => [
                 'name' => 'test_default_null',
@@ -83,7 +86,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => false,
                 'default' => null,
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
             'test_default_string' => [
                 'name' => 'test_default_string',
@@ -93,7 +97,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => false,
                 'default' => 'string',
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
             'test_default_number' => [
                 'name' => 'test_default_number',
@@ -103,7 +108,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => false,
                 'default' => '12345',
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
             'test_default_ignore' => [
                 'name' => 'test_default_ignore',
@@ -113,7 +119,8 @@ class PgsqlInfoTest extends InfoTest
                 'notnull' => false,
                 'default' => null,
                 'autoinc' => false,
-                'primary' => false
+                'primary' => false,
+                'options' => null,
             ],
         ];
 

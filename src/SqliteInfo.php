@@ -85,6 +85,7 @@ class SqliteInfo extends Info
             'default' => $row['dflt_value'],
             'autoinc' => null,
             'primary' => (bool) ($row['pk']),
+            'options' => null,
         ];
     }
 

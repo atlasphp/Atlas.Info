@@ -119,7 +119,8 @@ abstract class Info
             'notnull' => (bool) $def['_notnull'],
             'default' => $this->getDefault($def['_default']),
             'autoinc' => (bool) $def['_autoinc'],
-            'primary' => (bool) $def['_primary']
+            'primary' => (bool) $def['_primary'],
+            'options' => null,
         ];
     }
 
