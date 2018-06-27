@@ -120,6 +120,7 @@ class PgsqlInfoTest extends InfoTest
         return [
             [$this->tableName, $columns],
             ["{$this->schemaName2}.{$this->tableName}", $columns],
+            ["{$this->schemaName2}.{$this->tableName}", $columns],
         ];
     }
 
@@ -127,5 +128,16 @@ class PgsqlInfoTest extends InfoTest
     {
         $actual = $this->info->fetchAutoincSequence($this->tableName);
         $this->assertSame('atlas_test_table_id_seq', $actual);
+
+        $actual = $this->info->fetchAutoincSequence("{$this->schemaName2}.{$this->tableName}");
+        $this->assertSame('atlas_test_info_2.atlas_test_table_id_seq', $actual);
+
+        $this->connection->query("
+            CREATE TABLE {$this->tableName}_nopk (
+                name VARCHAR(50) NOT NULL
+            )
+        ");
+        $actual = $this->info->fetchAutoincSequence("{$this->tableName}_nopk");
+        $this->assertNull($actual);
     }
 }

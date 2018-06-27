@@ -104,4 +104,11 @@ abstract class InfoTest extends \PHPUnit\Framework\TestCase
     }
 
     abstract public function provideFetchColumns();
+
+
+    public function testFetchAutoincSequence()
+    {
+        $actual = $this->info->fetchAutoincSequence($this->tableName);
+        $this->assertNull($actual);
+    }
 }
