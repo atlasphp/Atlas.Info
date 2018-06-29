@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.0
+
+Adds a new key to the column information, 'options', to list ENUM value options.
+The key appears for all databases, but is implemented only for MySQL.
+
 ## 1.0.0
 
 Update docs.
