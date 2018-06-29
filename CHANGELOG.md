@@ -2,8 +2,15 @@
 
 ## 1.1.0
 
-Adds a new key to the column information, 'options', to list ENUM value options.
-The key appears for all databases, but is implemented only for MySQL.
+Fixes issue #3 so as not to overwrite the 'primary' column information if the
+column is both a primary key and a foreign key in MySQL.
+
+Recognizes UNSIGNED integer types in MySQL and reports them as part of the
+column information 'type' element.
+
+Adds a new element to the column information, 'options', to list ENUM value
+options. The element appears for all databases, but is implemented only for
+MySQL.
 
 ## 1.0.0
 
