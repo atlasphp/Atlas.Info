@@ -40,10 +40,11 @@ abstract class Info
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = :schema
+            AND table_type = :type
             ORDER BY table_name
         ';
 
-        return $this->connection->fetchColumn($stm, ['schema' => $schema]);
+        return $this->connection->fetchColumn($stm, ['schema' => $schema, 'type' => 'base table']);
     }
 
     public function fetchColumns(string $table) : array
