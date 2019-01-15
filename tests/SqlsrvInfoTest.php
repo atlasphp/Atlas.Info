@@ -7,10 +7,10 @@ class SqlsrvInfoTest extends InfoTest
 {
     protected function create()
     {
-        $this->pdo->query("CREATE SCHEMA {$this->schemaName1}");
-        $this->pdo->query("CREATE SCHEMA {$this->schemaName2}");
+        $this->connection->query("CREATE SCHEMA {$this->schemaName1}");
+        $this->connection->query("CREATE SCHEMA {$this->schemaName2}");
 
-        $this->pdo->query("
+        $this->connection->query("
             CREATE TABLE {$this->schemaName1}.{$this->tableName} (
                 id                     INT IDENTITY PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
@@ -18,11 +18,12 @@ class SqlsrvInfoTest extends InfoTest
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
+                test_default_integer   INT DEFAULT 233,
                 test_default_ignore    DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
 
-        $this->pdo->query("
+        $this->connection->query("
             CREATE TABLE {$this->schemaName2}.{$this->tableName} (
                 id                     INT IDENTITY PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
@@ -30,6 +31,7 @@ class SqlsrvInfoTest extends InfoTest
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
+                test_default_integer   INT DEFAULT 233,
                 test_default_ignore    DATETIME DEFAULT CURRENT_TIMESTAMP
             )
         ");
@@ -44,18 +46,18 @@ class SqlsrvInfoTest extends InfoTest
 
         $stm = "INSERT INTO {$this->schemaName1}.{$this->tableName} (name) VALUES (:name)";
         foreach ($names as $name) {
-            $sth = $this->pdo->prepare($stm);
+            $sth = $this->connection->prepare($stm);
             $sth->execute(['name' => $name]);
         }
     }
 
     protected function drop()
     {
-        $this->pdo->query("DROP TABLE IF EXISTS {$this->schemaName1}.{$this->tableName}");
-        $this->pdo->query("DROP SCHEMA IF EXISTS {$this->schemaName1}");
+        $this->connection->query("DROP TABLE IF EXISTS {$this->schemaName1}.{$this->tableName}");
+        $this->connection->query("DROP SCHEMA IF EXISTS {$this->schemaName1}");
 
-        $this->pdo->query("DROP TABLE IF EXISTS {$this->schemaName2}.{$this->tableName}");
-        $this->pdo->query("DROP SCHEMA IF EXISTS {$this->schemaName2}");
+        $this->connection->query("DROP TABLE IF EXISTS {$this->schemaName2}.{$this->tableName}");
+        $this->connection->query("DROP SCHEMA IF EXISTS {$this->schemaName2}");
     }
 
     public function provideFetchTableNames()
@@ -68,8 +70,7 @@ class SqlsrvInfoTest extends InfoTest
                     'spt_fallback_db',
                     'spt_fallback_dev',
                     'spt_fallback_usg',
-                    'spt_monitor',
-                    'spt_values',
+                    'spt_monitor'
                 ],
             ],
             [
@@ -152,6 +153,17 @@ class SqlsrvInfoTest extends InfoTest
                 'scale' => 0,
                 'notnull' => false,
                 'default' => '12345',
+                'autoinc' => false,
+                'primary' => false,
+                'options' => null,
+            ],
+            'test_default_integer' => [
+                'name' => 'test_default_integer',
+                'type' => 'int',
+                'size' => 10,
+                'scale' => 0,
+                'notnull' => false,
+                'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
                 'options' => null,

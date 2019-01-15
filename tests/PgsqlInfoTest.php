@@ -19,6 +19,7 @@ class PgsqlInfoTest extends InfoTest
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
+                test_default_integer   INT DEFAULT 233,
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ");
@@ -31,6 +32,7 @@ class PgsqlInfoTest extends InfoTest
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
+                test_default_integer   INT DEFAULT 233,
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
         ");
@@ -107,6 +109,17 @@ class PgsqlInfoTest extends InfoTest
                 'scale' => 0,
                 'notnull' => false,
                 'default' => '12345',
+                'autoinc' => false,
+                'primary' => false,
+                'options' => null,
+            ],
+            'test_default_integer' => [
+                'name' => 'test_default_integer',
+                'type' => 'integer',
+                'size' => 32,
+                'scale' => 0,
+                'notnull' => false,
+                'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
                 'options' => null,
