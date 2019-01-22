@@ -40,7 +40,7 @@ abstract class Info
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = :schema
-            AND table_type = :type
+            AND lower(table_type) = :type
             ORDER BY table_name
         ';
 
@@ -121,11 +121,31 @@ abstract class Info
             'size' => isset($def['_size']) ? (int) $def['_size'] : null,
             'scale' => isset($def['_scale']) ? (int) $def['_scale'] : null,
             'notnull' => (bool) $def['_notnull'],
-            'default' => $this->getDefault($def['_default']),
+            'default' => $this->extractDefault($def['_default'], $def['_type']),
             'autoinc' => (bool) $def['_autoinc'],
             'primary' => (bool) $def['_primary'],
             'options' => null,
         ];
+    }
+
+    protected function extractDefault($default, string $type)
+    {
+        $type = strtolower($type);
+        $default = $this->getDefault($default);
+
+        if (!isset($default)) {
+            return $default;
+        }
+
+        if (strpos($type, 'int') !== false) {
+            return (int) $default;
+        }
+
+        if ($type == 'float' || $type == 'double') {
+            return (float) $default;
+        }
+
+        return $default;
     }
 
     public function fetchAutoincSequence(string $table) : ?string

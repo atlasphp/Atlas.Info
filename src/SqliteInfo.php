@@ -82,7 +82,7 @@ class SqliteInfo extends Info
             'size' => $size,
             'scale' => $scale,
             'notnull' => (bool) ($row['notnull']),
-            'default' => $row['dflt_value'],
+            'default' => $this->extractDefault($row['dflt_value'], $type),
             'autoinc' => null,
             'primary' => (bool) ($row['pk']),
             'options' => null,
@@ -123,7 +123,7 @@ class SqliteInfo extends Info
         // Check the table-creation SQL for the default value to see if it's
         // a keyword and report 'null' in those cases.
 
-        if ($curr['default'] === null) {
+        if (is_string($curr['default']) === false) {
             return null;
         }
 
