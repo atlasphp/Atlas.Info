@@ -40,7 +40,7 @@ abstract class Info
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = :schema
-            AND lower(table_type) = :type
+            AND UPPER(table_type) = :type
             ORDER BY table_name
         ';
 
