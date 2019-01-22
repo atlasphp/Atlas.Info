@@ -44,7 +44,7 @@ abstract class Info
             ORDER BY table_name
         ';
 
-        return $this->connection->fetchColumn($stm, ['schema' => $schema, 'type' => 'base table']);
+        return $this->connection->fetchColumn($stm, ['schema' => $schema, 'type' => 'BASE TABLE']);
     }
 
     public function fetchColumns(string $table) : array
