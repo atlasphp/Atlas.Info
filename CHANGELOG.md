@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.1.1
+
+Adds a WHERE clause to ensure that Info is only fetching table names for user-
+created tables, and not views or system tables.
+
 ## 1.1.0
 
 Fixes issue #3 so as not to overwrite the 'primary' column information if the
