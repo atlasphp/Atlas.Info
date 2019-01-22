@@ -133,7 +133,7 @@ abstract class Info
         $type = strtolower($type);
         $default = $this->getDefault($default);
 
-        if (!isset($default)) {
+        if ($default === null) {
             return $default;
         }
 
@@ -141,7 +141,7 @@ abstract class Info
             return (int) $default;
         }
 
-        if ($type == 'float' || $type == 'double') {
+        if ($type == 'float' || $type == 'double' || $type == 'real') {
             return (float) $default;
         }
 
