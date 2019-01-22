@@ -1,9 +1,12 @@
 # CHANGELOG
 
-## 1.1.1
+## 1.2.0
 
 Adds a WHERE clause to ensure that Info is only fetching table names for user-
 created tables, and not views or system tables.
+
+All column 'default' values for integer and float/double/real database types are
+now retained as integer and float values, instead of as strings.
 
 ## 1.1.0
 
