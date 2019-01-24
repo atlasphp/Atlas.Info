@@ -10,6 +10,8 @@ declare(strict_types=1);
 
 namespace Atlas\Info;
 
+use Atlas\Pdo\Connection;
+
 class MysqlInfo extends Info
 {
     protected $maria = false;
