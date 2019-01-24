@@ -12,6 +12,18 @@ namespace Atlas\Info;
 
 class MysqlInfo extends Info
 {
+    protected $maria = false;
+
+    public function __construct(Connection $connection)
+    {
+        parent::__construct($connection);
+
+        $vars = $connection->fetchKeyPair("SHOW VARIABLES LIKE '%version%'");
+        if (isset($vars['version']) && stripos($vars['version'], 'maria')) {
+            $this->maria = true;
+        }
+    }
+
     public function fetchCurrentSchema() : string
     {
         return $this->connection->fetchValue('SELECT DATABASE()');
@@ -34,6 +46,15 @@ class MysqlInfo extends Info
     protected function extractColumn(string $schema, string $table, array $def) : array
     {
         $column = parent::extractColumn($schema, $table, $def);
+
+        if (
+            $this->maria
+            && $column['notnull'] == 0
+            && $column['default'] === 'NULL'
+        ) {
+            $column['default'] = null;
+        }
+
         $extended = trim($def['_extended']);
 
         $pos = stripos($extended, 'unsigned');

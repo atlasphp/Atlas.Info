@@ -26,6 +26,9 @@ abstract class Info
     public function __construct(Connection $connection)
     {
         $this->connection = $connection;
+        $this->variables = $connection->fetchKeyPair(
+            "SHOW VARIABLES like '%version%'"
+        );
     }
 
     abstract public function fetchCurrentSchema() : string;
