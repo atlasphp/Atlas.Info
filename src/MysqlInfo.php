@@ -49,14 +49,6 @@ class MysqlInfo extends Info
     {
         $column = parent::extractColumn($schema, $table, $def);
 
-        if (
-            $this->maria
-            && $column['notnull'] == 0
-            && $column['default'] === 'NULL'
-        ) {
-            $column['default'] = null;
-        }
-
         $extended = trim($def['_extended']);
 
         $pos = stripos($extended, 'unsigned');
@@ -75,9 +67,13 @@ class MysqlInfo extends Info
         return $column;
     }
 
-    protected function getDefault($default)
+    protected function getDefault($default, $type, $canBeNull)
     {
         if ($default === null) {
+            return null;
+        }
+
+        if ($this->maria && $canBeNull && $default === 'NULL') {
             return null;
         }
 
