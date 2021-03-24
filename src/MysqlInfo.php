@@ -57,6 +57,14 @@ class MysqlInfo extends Info
             $column['default'] = null;
         }
 
+        if (
+            $this->maria
+            && (in_array($column['type'], ['char', 'varchar', 'text']))
+            && $column['default'] === '\'\''
+        ) {
+            $column['default'] = '';
+        }
+
         $extended = trim($def['_extended']);
 
         $pos = stripos($extended, 'unsigned');
