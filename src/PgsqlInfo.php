@@ -72,7 +72,7 @@ class PgsqlInfo extends Info
                 END";
     }
 
-    protected function getDefault($default, $type, $canBeNull)
+    protected function getDefault($default, $type, $nullable)
     {
         // null?
         if ($default === null || strtoupper($default) === 'NULL') {

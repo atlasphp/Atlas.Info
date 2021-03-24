@@ -128,10 +128,10 @@ abstract class Info
         ];
     }
 
-    protected function extractDefault($default, string $type, bool $canBeNull)
+    protected function extractDefault($default, string $type, bool $nullable)
     {
         $type = strtolower($type);
-        $default = $this->getDefault($default, $type, $canBeNull);
+        $default = $this->getDefault($default, $type, $nullable);
 
         if ($default === null) {
             return $default;
@@ -160,5 +160,5 @@ abstract class Info
 
     abstract protected function getAutoincSql() : string;
 
-    abstract protected function getDefault($default, $type, $canBeNull);
+    abstract protected function getDefault($default, $type, $nullable);
 }
