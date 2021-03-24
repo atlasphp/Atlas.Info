@@ -82,7 +82,7 @@ class SqliteInfo extends Info
             'size' => $size,
             'scale' => $scale,
             'notnull' => (bool) ($row['notnull']),
-            'default' => $this->extractDefault($row['dflt_value'], $type, !$def['notnull']),
+            'default' => $this->extractDefault($row['dflt_value'], $type, !$row['notnull']),
             'autoinc' => null,
             'primary' => (bool) ($row['pk']),
             'options' => null,
