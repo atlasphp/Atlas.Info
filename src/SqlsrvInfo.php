@@ -26,7 +26,7 @@ class SqlsrvInfo extends Info
                 )";
     }
 
-    protected function getDefault($default)
+    protected function getDefault($default, $type, $canBeNull)
     {
         // no default
         if ($default === null) {

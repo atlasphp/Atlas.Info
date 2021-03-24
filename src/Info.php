@@ -121,17 +121,17 @@ abstract class Info
             'size' => isset($def['_size']) ? (int) $def['_size'] : null,
             'scale' => isset($def['_scale']) ? (int) $def['_scale'] : null,
             'notnull' => (bool) $def['_notnull'],
-            'default' => $this->extractDefault($def['_default'], $def['_type']),
+            'default' => $this->extractDefault($def['_default'], $def['_type'], !$def['_notnull']),
             'autoinc' => (bool) $def['_autoinc'],
             'primary' => (bool) $def['_primary'],
             'options' => null,
         ];
     }
 
-    protected function extractDefault($default, string $type)
+    protected function extractDefault($default, string $type, bool $canBeNull)
     {
         $type = strtolower($type);
-        $default = $this->getDefault($default);
+        $default = $this->getDefault($default, $type, $canBeNull);
 
         if ($default === null) {
             return $default;
@@ -160,5 +160,5 @@ abstract class Info
 
     abstract protected function getAutoincSql() : string;
 
-    abstract protected function getDefault($default);
+    abstract protected function getDefault($default, $type, $canBeNull);
 }

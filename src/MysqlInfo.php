@@ -83,9 +83,13 @@ class MysqlInfo extends Info
         return $column;
     }
 
-    protected function getDefault($default)
+    protected function getDefault($default, $type, $canBeNull)
     {
         if ($default === null) {
+            return null;
+        }
+
+        if ($this->maria && $canBeNull && $default === 'NULL') {
             return null;
         }
 
