@@ -3,67 +3,89 @@ namespace Atlas\Info;
 
 use Atlas\Info\InfoTest;
 
-class MysqlInfoTest extends InfoTest
+class SqlsrvTest extends InfoTest
 {
-    protected $schemaNameIssue3 = 'atlas_test_issue_3';
-    protected $tableIssue3Table1 = 'table_1';
-    protected $tableIssue3Table2 = 'table_2';
-
     protected function create()
     {
-        $this->connection->query("CREATE DATABASE {$this->schemaName1}");
-        $this->connection->query("CREATE DATABASE {$this->schemaName2}");
-        $this->connection->query("CREATE DATABASE {$this->schemaNameIssue3}");
+        $this->connection->query("CREATE SCHEMA {$this->schemaName1}");
+        $this->connection->query("CREATE SCHEMA {$this->schemaName2}");
 
-        $this->connection->query("USE {$this->schemaName1}");
         $this->connection->query("
-            CREATE TABLE {$this->tableName} (
-                id                     INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+            CREATE TABLE {$this->schemaName1}.{$this->tableName} (
+                id                     INT IDENTITY PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
                 test_size_scale        NUMERIC(7,3),
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
-                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                test_enum              ENUM('foo', 'bar', 'baz')
-            ) ENGINE=InnoDB
+                test_default_ignore    DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         ");
 
         $this->connection->query("
             CREATE TABLE {$this->schemaName2}.{$this->tableName} (
-                id                     INTEGER UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                id                     INT IDENTITY PRIMARY KEY,
                 name                   VARCHAR(50) NOT NULL,
                 test_size_scale        NUMERIC(7,3),
                 test_default_null      CHAR(3) DEFAULT NULL,
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
-                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                test_enum              ENUM('foo', 'bar', 'baz')
-            ) ENGINE=InnoDB
+                test_default_ignore    DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
         ");
+    }
 
-        $this->connection->query("
-            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table1}(
-                fk_id CHAR(40),
-                PRIMARY KEY(fk_id)
-            ) ENGINE=INNODB;
-        ");
-        $this->connection->query("
-            CREATE TABLE {$this->schemaNameIssue3}.{$this->tableIssue3Table2}(
-            fk_id CHAR(40),
-                PRIMARY KEY(fk_id),
-                FOREIGN KEY (fk_id) REFERENCES table_1(fk_id)
-            ) ENGINE=INNODB;
-        ");
+    protected function insert()
+    {
+        $names = [
+            'Anna', 'Betty', 'Clara', 'Donna', 'Fiona',
+            'Gertrude', 'Hanna', 'Ione', 'Julia', 'Kara',
+        ];
+
+        $stm = "INSERT INTO {$this->schemaName1}.{$this->tableName} (name) VALUES (:name)";
+        foreach ($names as $name) {
+            $sth = $this->connection->prepare($stm);
+            $sth->execute(['name' => $name]);
+        }
     }
 
     protected function drop()
     {
-        $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaName1}");
-        $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaName2}");
-        $this->connection->query("DROP DATABASE IF EXISTS {$this->schemaNameIssue3}");
+        $this->connection->query("DROP TABLE IF EXISTS {$this->schemaName1}.{$this->tableName}");
+        $this->connection->query("DROP SCHEMA IF EXISTS {$this->schemaName1}");
+
+        $this->connection->query("DROP TABLE IF EXISTS {$this->schemaName2}.{$this->tableName}");
+        $this->connection->query("DROP SCHEMA IF EXISTS {$this->schemaName2}");
+    }
+
+    public function provideFetchTableNames()
+    {
+        return [
+            [
+                '',
+                [
+                    'MSreplication_options',
+                    'spt_fallback_db',
+                    'spt_fallback_dev',
+                    'spt_fallback_usg',
+                    'spt_monitor'
+                ],
+            ],
+            [
+                $this->schemaName1,
+                [
+                    $this->tableName,
+                ],
+            ],
+            [
+                $this->schemaName2,
+                [
+                    $this->tableName,
+                ],
+            ],
+        ];
     }
 
     public function provideFetchColumns()
@@ -71,7 +93,7 @@ class MysqlInfoTest extends InfoTest
         $columns = [
             'id' => [
                 'name' => 'id',
-                'type' => 'int unsigned',
+                'type' => 'int',
                 'size' => 10,
                 'scale' => 0,
                 'notnull' => true,
@@ -93,7 +115,7 @@ class MysqlInfoTest extends InfoTest
             ],
             'test_size_scale' => [
                 'name' => 'test_size_scale',
-                'type' => 'decimal',
+                'type' => 'numeric',
                 'size' => 7,
                 'scale' => 3,
                 'notnull' => false,
@@ -126,7 +148,7 @@ class MysqlInfoTest extends InfoTest
             ],
             'test_default_number' => [
                 'name' => 'test_default_number',
-                'type' => 'decimal',
+                'type' => 'numeric',
                 'size' => 5,
                 'scale' => 0,
                 'notnull' => false,
@@ -148,45 +170,21 @@ class MysqlInfoTest extends InfoTest
             ],
             'test_default_ignore' => [
                 'name' => 'test_default_ignore',
-                'type' => 'timestamp',
+                'type' => 'datetime',
                 'size' => null,
-                'scale' => null,
-                'notnull' => true,
-                'default' => null,
-                'autoinc' => false,
-                'primary' => false,
-                'options' => null,
-            ],
-            'test_enum' => [
-                'name' => 'test_enum',
-                'type' => 'enum',
-                'size' => 3,
                 'scale' => null,
                 'notnull' => false,
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
-                'options' => ['foo', 'bar', 'baz'],
-            ],
-        ];
-        $issue3Columns = [
-            'fk_id' => [
-                'name' => 'fk_id',
-                'type' => 'char',
-                'size' => 40,
-                'scale' => null,
-                'notnull' => true,
-                'default' => null,
-                'autoinc' => false,
-                'primary' => true,
                 'options' => null,
             ],
         ];
 
         return [
-            [$this->tableName, $columns],
+            [$this->tableName, []], // MUST have a schema name to work
+            ["{$this->schemaName1}.{$this->tableName}", $columns],
             ["{$this->schemaName2}.{$this->tableName}", $columns],
-            ["{$this->schemaNameIssue3}.{$this->tableIssue3Table2}", $issue3Columns],
         ];
     }
 }

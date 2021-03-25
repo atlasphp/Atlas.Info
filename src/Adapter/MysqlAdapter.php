@@ -8,13 +8,13 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Info;
+namespace Atlas\Info\Adapter;
 
 use Atlas\Pdo\Connection;
 
-class MysqlInfo extends Info
+class MysqlAdapter extends Adapter
 {
-    protected $maria = false;
+    protected bool $maria = false;
 
     public function __construct(Connection $connection)
     {
@@ -31,7 +31,7 @@ class MysqlInfo extends Info
         return $this->connection->fetchValue('SELECT DATABASE()');
     }
 
-    protected function getAutoincSql() : string
+    public function getAutoincSql() : string
     {
         return "CASE
                     WHEN LOCATE('auto_increment', columns.EXTRA) > 0 THEN 1
@@ -39,13 +39,13 @@ class MysqlInfo extends Info
                 END";
     }
 
-    protected function getExtendedSql() : string
+    public function getExtendedSql() : string
     {
         return ',
                 columns.column_type as _extended';
     }
 
-    protected function extractColumn(string $schema, string $table, array $def) : array
+    public function extractColumn(string $schema, string $table, array $def) : array
     {
         $column = parent::extractColumn($schema, $table, $def);
 
@@ -83,7 +83,7 @@ class MysqlInfo extends Info
         return $column;
     }
 
-    protected function getDefault($default, $type, $nullable)
+    public function getDefault(mixed $default, string $type, bool $nullable) : mixed
     {
         if ($default === null) {
             return null;

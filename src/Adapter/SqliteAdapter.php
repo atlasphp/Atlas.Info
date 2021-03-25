@@ -8,21 +8,17 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Info;
+namespace Atlas\Info\Adapter;
 
-class SqliteInfo extends Info
+class SqliteAdapter extends Adapter
 {
     public function fetchCurrentSchema() : string
     {
         return 'main';
     }
 
-    public function fetchTableNames(string $schema = '') : array
+    public function fetchTableNames(string $schema) : array
     {
-        if ($schema === '') {
-            $schema = $this->fetchCurrentSchema();
-        }
-
         $schema = $this->quoteName($schema);
         $stm = "
             SELECT name FROM {$schema}.sqlite_master WHERE type = 'table'
@@ -31,23 +27,15 @@ class SqliteInfo extends Info
         return $this->connection->fetchColumn($stm);
     }
 
-    public function fetchColumns(string $table) : array
+    public function fetchColumns(string $schema, string $table) : array
     {
-        $pos = strpos($table, '.');
-        if ($pos === false) {
-            $schema = $this->fetchCurrentSchema();
-        } else {
-            $schema = substr($table, 0, $pos);
-            $table = substr($table, $pos + 1);
-        }
-
         $qs = $this->quoteName($schema);
         $qt = $this->quoteName($table);
         $rows = $this->connection->fetchAll("PRAGMA {$qs}.table_info({$qt})");
         return $this->extractColumns($schema, $table, $rows);
     }
 
-    protected function extractColumns(string $schema, string $table, array $rows) : array
+    public function extractColumns(string $schema, string $table, array $rows) : array
     {
         $info = [];
         foreach ($rows as $row) {
@@ -65,7 +53,7 @@ class SqliteInfo extends Info
         return $defs;
     }
 
-    protected function extractColumn(string $schema, string $table, array $row) : array
+    public function extractColumn(string $schema, string $table, array $row) : array
     {
         preg_match(
             "/^([^\(]*)(\(([\d\s]+)(,([\d\s]+))?\))?/",
@@ -89,12 +77,12 @@ class SqliteInfo extends Info
         ];
     }
 
-    protected function getAutoincSql() : string
+    public function getAutoincSql() : string
     {
         return 'INTEGER\s+(?:NULL\s+|NOT NULL\s+)?PRIMARY\s+KEY\s+AUTOINCREMENT';
     }
 
-    protected function fetchCreateTable(string $schema, string $table) : string
+    public function fetchCreateTable(string $schema, string $table) : string
     {
         $schema = $this->quoteName($schema);
         $cmd = "
@@ -104,12 +92,12 @@ class SqliteInfo extends Info
         return $this->connection->fetchValue($cmd, ['table' => $table]);
     }
 
-    protected function getDefault($default, $type, $nullable)
+    public function getDefault(mixed $default, string $type, bool $nullable) : mixed
     {
         return $default;
     }
 
-    protected function fixDefault(array &$curr, string $create, $next)
+    public function fixDefault(array &$curr, string $create, array|false $next) : void
     {
         // For defaults using keywords, SQLite always reports the keyword
         // *value*, not the keyword itself (e.g., '2007-03-07' instead of
@@ -124,21 +112,23 @@ class SqliteInfo extends Info
         // a keyword and report 'null' in those cases.
 
         if (is_string($curr['default']) === false) {
-            return null;
+            return;
         }
 
         $curr['default'] = trim($curr['default'], "'");
         if ($curr['default'] === 'NULL') {
             $curr['default'] = null;
-            return null;
+            return;
         }
 
         // look for `:curr_col :curr_type . DEFAULT CURRENT_(...)` --
         // if not at the end, don't look further than the next coldef
         $find = "{$curr['name']}\s+{$curr['type']}.*\s+DEFAULT\s+CURRENT_(DATE|TIME|TIMESTAMP)";
-        if ($next) {
+
+        if ($next !== false) {
             $find .= ".*{$next['name']}\s+{$next['type']}";
         }
+
         if (preg_match("/$find/ims", $create, $matches)) {
             $curr['default'] = null;
             return;
@@ -148,14 +138,14 @@ class SqliteInfo extends Info
         return;
     }
 
-    protected function fixAutoinc(array &$curr, string $create)
+    public function fixAutoinc(array &$curr, string $create) : void
     {
         $name = $curr['name'];
         $find = "(\"$name\"|\'$name\'|`$name`|\[$name\]|\\b$name)\s+" . $this->getAutoincSql();
         $curr['autoinc'] = (bool) preg_match("/{$find}/Ui", $create);
     }
 
-    protected function quoteName($name)
+    public function quoteName(string $name) : string
     {
         return '"' . str_replace('"', '""', $name) . '"';
     }

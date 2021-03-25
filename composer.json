@@ -12,12 +12,13 @@
     "homepage": "https://github.com/atlasphp/Atlas.Info",
     "license": "MIT",
     "require": {
-        "php": ">=7.1",
-        "atlas/pdo": "~1.0"
+        "php": "^8.0",
+        "atlas/pdo": "2.x-dev"
     },
     "require-dev": {
-        "pds/skeleton": "~1.0",
-        "phpunit/phpunit": "~7.0"
+        "pds/skeleton": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "phpstan/phpstan": "^0.12.82"
     },
     "autoload": {
         "psr-4": {
@@ -28,5 +29,9 @@
         "psr-4": {
             "Atlas\\Info\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit",
+        "stan": "./vendor/bin/phpstan analyze -c phpstan.neon src"
     }
 }

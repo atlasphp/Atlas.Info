@@ -8,25 +8,17 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Info;
+namespace Atlas\Info\Adapter;
 
-class PgsqlInfo extends Info
+class PgsqlAdapter extends Adapter
 {
     public function fetchCurrentSchema() : string
     {
         return $this->connection->fetchValue('SELECT CURRENT_SCHEMA');
     }
 
-    public function fetchAutoincSequence(string $table) : ?string
+    public function fetchAutoincSequence(string $schema, string $table) : ?string
     {
-        $pos = strpos($table, '.');
-        if ($pos === false) {
-            $schema = $this->fetchCurrentSchema();
-        } else {
-            $schema = substr($table, 0, $pos);
-            $table = substr($table, $pos + 1);
-        }
-
         $stm = "
             SELECT
                 columns.column_name,
@@ -64,7 +56,7 @@ class PgsqlInfo extends Info
         return null;
     }
 
-    protected function getAutoincSql() : string
+    public function getAutoincSql() : string
     {
         return "CASE
                     WHEN SUBSTRING(columns.COLUMN_DEFAULT FROM 1 FOR 7) = 'nextval' THEN 1
@@ -72,7 +64,7 @@ class PgsqlInfo extends Info
                 END";
     }
 
-    protected function getDefault($default, $type, $nullable)
+    public function getDefault(mixed $default, string $type, bool $nullable) : mixed
     {
         // null?
         if ($default === null || strtoupper($default) === 'NULL') {

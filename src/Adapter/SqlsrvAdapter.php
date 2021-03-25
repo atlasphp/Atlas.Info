@@ -8,16 +8,16 @@
  */
 declare(strict_types=1);
 
-namespace Atlas\Info;
+namespace Atlas\Info\Adapter;
 
-class SqlsrvInfo extends Info
+class SqlsrvAdapter extends Adapter
 {
     public function fetchCurrentSchema() : string
     {
         return $this->connection->fetchValue('SELECT SCHEMA_NAME()');
     }
 
-    protected function getAutoincSql() : string
+    public function getAutoincSql() : string
     {
         return "COLUMNPROPERTY(
                     OBJECT_ID(COLUMNS.TABLE_SCHEMA + '.' + COLUMNS.TABLE_NAME),
@@ -26,7 +26,7 @@ class SqlsrvInfo extends Info
                 )";
     }
 
-    protected function getDefault($default, $type, $nullable)
+    public function getDefault(mixed $default, string $type, bool $nullable) : mixed
     {
         // no default
         if ($default === null) {

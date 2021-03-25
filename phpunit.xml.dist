@@ -1,31 +1,27 @@
-<phpunit bootstrap="./phpunit.php">
-    <testsuites>
-        <testsuite name="atlas/info">
-            <directory>./tests</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">./src</directory>
-        </whitelist>
-    </filter>
-    <php>
-
-        <var name="Atlas\Info\MysqlInfoTest:dsn" value="mysql:host=127.0.0.1" />
-        <var name="Atlas\Info\MysqlInfoTest:username" value="root" />
-        <var name="Atlas\Info\MysqlInfoTest:password" value="" />
-
-        <var name="Atlas\Info\PgsqlInfoTest:dsn" value="pgsql:host=127.0.0.1" />
-        <var name="Atlas\Info\PgsqlInfoTest:username" value="postgres" />
-        <var name="Atlas\Info\PgsqlInfoTest:password" value="" />
-
-        <var name="Atlas\Info\SqliteInfoTest:dsn" value="sqlite::memory:" />
-        <var name="Atlas\Info\SqliteInfoTest:username" value="" />
-        <var name="Atlas\Info\SqliteInfoTest:password" value="" />
-
-        <var name="Atlas\Info\SqlsrvInfoTest:dsn" value="sqlsrv:Server=localhost" />
-        <var name="Atlas\Info\SqlsrvInfoTest:username" value="sa" />
-        <var name="Atlas\Info\SqlsrvInfoTest:password" value="Admin@dm1n" />
-
-    </php>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./phpunit.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage processUncoveredFiles="true">
+    <include>
+      <directory suffix=".php">./src</directory>
+    </include>
+  </coverage>
+  <testsuites>
+    <testsuite name="atlas/info">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
+  <php>
+    <var name="Atlas\Info\MysqlTest:dsn" value="mysql:host=127.0.0.1"/>
+    <var name="Atlas\Info\MysqlTest:username" value="root"/>
+    <var name="Atlas\Info\MysqlTest:password" value=""/>
+    <var name="Atlas\Info\PgsqlTest:dsn" value="pgsql:host=127.0.0.1"/>
+    <var name="Atlas\Info\PgsqlTest:username" value="postgres"/>
+    <var name="Atlas\Info\PgsqlTest:password" value=""/>
+    <var name="Atlas\Info\SqliteTest:dsn" value="sqlite::memory:"/>
+    <var name="Atlas\Info\SqliteTest:username" value=""/>
+    <var name="Atlas\Info\SqliteTest:password" value=""/>
+    <var name="Atlas\Info\SqlsrvTest:dsn" value="sqlsrv:Server=localhost"/>
+    <var name="Atlas\Info\SqlsrvTest:username" value="sa"/>
+    <var name="Atlas\Info\SqlsrvTest:password" value="Admin@dm1n"/>
+  </php>
 </phpunit>

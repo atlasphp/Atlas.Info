@@ -11,12 +11,12 @@ abstract class InfoTest extends \PHPUnit\Framework\TestCase
     protected $schemaName2 = 'atlas_test_info_2';
     protected $tableName = 'atlas_test_table';
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $class = get_class($this);
 
         // Atlas\Info\FooTest => foo
-        $driver = strtolower(substr($class, 11, -8));
+        $driver = strtolower(substr($class, 11, -4));
         $extension = "pdo_{$driver}";
         if (! extension_loaded($extension)) {
             $this->markTestSkipped("{$extension} extension not loaded");
@@ -66,7 +66,7 @@ abstract class InfoTest extends \PHPUnit\Framework\TestCase
     public function provideFetchTableNames()
     {
         return [
-            ['', [$this->tableName]],
+            [null, [$this->tableName]],
             [$this->schemaName1, [$this->tableName]],
             [$this->schemaName2, [$this->tableName]],
         ];

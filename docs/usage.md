@@ -14,7 +14,7 @@ $info = Info::new($connection);
 
 > **Note:**
 >
-> The `new()` method will automatically pick the right schema-discovery class
+> The `new()` method will automatically pick the right schema-discovery adapter
 > for your _Connection_.
 
 
@@ -82,5 +82,10 @@ table, call `fetchAutoincSequence()` with the table name.
 $sequence = $info->fetchAutoincSequence('table_name');
 // => 'table_name_id_seq'
 ```
+
+> **Tip:**
+>
+> You can use a schema prefix on the table name if you like, such as
+> 'schema_name.table_name'.
 
 On systems other than PostgreSQL, this will return `null`.
