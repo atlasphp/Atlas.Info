@@ -1,4 +1,12 @@
-# Usage
+# Schema Information
+
+## Installation
+
+This package is installable and autoloadable via [Composer](https://getcomposer.org/) as [atlas/info](https://packagist.org/packages/atlas/info).
+
+```
+composer require atlas/info ^2.0
+```
 
 ## Instantiation
 
@@ -24,6 +32,7 @@ To get an array of table names from the current schema, call `fetchTableNames()`
 
 ```php
 $tableNames = $info->fetchTableNames();
+
 foreach ($tableNames as $tableName) {
     echo $tableName . PHP_EOL;
 }

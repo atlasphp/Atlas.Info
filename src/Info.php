@@ -17,8 +17,17 @@ class Info
 {
     public static function new(Connection $connection) : Info
     {
-        $driver = $connection->getDriverName();
-        $adapter = __NAMESPACE__ . '\Adapter\\' . ucfirst($driver) . 'Adapter';
+        $type = $connection->getDriverName();
+
+        if ($type === 'mysql') {
+            $vars = $connection->fetchKeyPair("SHOW VARIABLES LIKE '%version%'");
+
+            if (isset($vars['version']) && stripos($vars['version'], 'maria')) {
+                $type = 'maria';
+            }
+        }
+
+        $adapter = __NAMESPACE__ . '\Adapter\\' . ucfirst($type) . 'Adapter';
         return new static(new $adapter($connection));
     }
 

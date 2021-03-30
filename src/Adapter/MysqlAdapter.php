@@ -14,18 +14,6 @@ use Atlas\Pdo\Connection;
 
 class MysqlAdapter extends Adapter
 {
-    protected bool $maria = false;
-
-    public function __construct(Connection $connection)
-    {
-        parent::__construct($connection);
-
-        $vars = $connection->fetchKeyPair("SHOW VARIABLES LIKE '%version%'");
-        if (isset($vars['version']) && stripos($vars['version'], 'maria')) {
-            $this->maria = true;
-        }
-    }
-
     public function fetchCurrentSchema() : string
     {
         return $this->connection->fetchValue('SELECT DATABASE()');
@@ -49,22 +37,6 @@ class MysqlAdapter extends Adapter
     {
         $column = parent::extractColumn($schema, $table, $def);
 
-        if (
-            $this->maria
-            && $column['notnull'] == 0
-            && $column['default'] === 'NULL'
-        ) {
-            $column['default'] = null;
-        }
-
-        if (
-            $this->maria
-            && (in_array($column['type'], ['char', 'varchar', 'text']))
-            && $column['default'] === '\'\''
-        ) {
-            $column['default'] = '';
-        }
-
         $extended = trim($def['_extended']);
 
         $pos = stripos($extended, 'unsigned');
@@ -86,10 +58,6 @@ class MysqlAdapter extends Adapter
     public function getDefault(mixed $default, string $type, bool $nullable) : mixed
     {
         if ($default === null) {
-            return null;
-        }
-
-        if ($this->maria && $nullable && $default === 'NULL') {
             return null;
         }
 
