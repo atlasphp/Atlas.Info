@@ -151,7 +151,7 @@ class MysqlInfoTest extends InfoTest
                 'type' => 'timestamp',
                 'size' => null,
                 'scale' => null,
-                'notnull' => true,
+                'notnull' => false,
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,

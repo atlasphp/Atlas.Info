@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## NEXT
+
+Several MariaDB fixes; cf. #7, #8, #9, #10, #11.
+
 ## 1.2.0
 
 Adds a WHERE clause to ensure that Info is only fetching table names for user-
