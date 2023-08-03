@@ -12,7 +12,7 @@
     "homepage": "https://github.com/atlasphp/Atlas.Info",
     "license": "MIT",
     "require": {
-        "php": ">=7.1",
+        "php": "^7.1||^7.2||^7.3||^7.4||^8.0||^8.1",
         "atlas/pdo": "~1.0"
     },
     "require-dev": {
