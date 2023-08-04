@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 1.3.0
+## 1.2.1
 
 Several MariaDB fixes; cf. #7, #8, #9, #10, #11.
 
