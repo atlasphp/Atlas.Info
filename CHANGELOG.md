@@ -1,8 +1,10 @@
 # CHANGELOG
 
-## NEXT
+## 1.3.0
 
 Several MariaDB fixes; cf. #7, #8, #9, #10, #11.
+
+Updated tests for more-recent versions of MySQL.
 
 ## 1.2.0
 
