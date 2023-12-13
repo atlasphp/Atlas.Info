@@ -72,6 +72,20 @@ class PgsqlInfo extends Info
                 END";
     }
 
+    protected function getCommentFieldSql() : string
+    {
+        return ',
+                pg_catalog.col_description(pg_catalog.pg_statio_all_tables.relid, columns.ordinal_position::int) AS _comment';
+    }
+
+    protected function getCommentJoinSql() : string
+    {
+        return '
+            LEFT JOIN pg_catalog.pg_statio_all_tables ON pg_catalog.pg_statio_all_tables.relid = columns.table_name::regclass
+                LEFT JOIN pg_catalog.pg_description ON pg_catalog.pg_description.objoid = pg_catalog.pg_statio_all_tables.relid
+                AND pg_catalog.pg_description.objsubid = columns.ordinal_position';
+    }
+
     protected function getDefault($default, $type, $nullable)
     {
         // null?

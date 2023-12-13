@@ -20,9 +20,11 @@ class PgsqlInfoTest extends InfoTest
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
-                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                test_comment           VARCHAR(50) DEFAULT NULL
             )
         ");
+        $this->connection->query("COMMENT ON COLUMN {$this->tableName}.test_comment IS 'Example'");
 
         $this->connection->query("
             CREATE TABLE {$this->schemaName2}.{$this->tableName} (
@@ -33,9 +35,11 @@ class PgsqlInfoTest extends InfoTest
                 test_default_string    VARCHAR(7) DEFAULT 'string',
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
-                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                test_comment           VARCHAR(50) DEFAULT NULL
             )
         ");
+        $this->connection->query("COMMENT ON COLUMN {$this->schemaName2}.{$this->tableName}.test_comment IS 'Example'");
     }
 
     protected function drop()
@@ -56,6 +60,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => true,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
             'name' => [
@@ -67,6 +72,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_size_scale' => [
@@ -78,6 +84,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_null' => [
@@ -89,6 +96,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_string' => [
@@ -100,6 +108,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => 'string',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_number' => [
@@ -111,6 +120,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => '12345',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_integer' => [
@@ -122,6 +132,7 @@ class PgsqlInfoTest extends InfoTest
                 'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_ignore' => [
@@ -133,6 +144,19 @@ class PgsqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
+                'options' => null,
+            ],
+            'test_comment' => [
+                'name' => 'test_comment',
+                'type' => 'character varying',
+                'size' => 50,
+                'scale' => null,
+                'notnull' => false,
+                'default' => null,
+                'autoinc' => false,
+                'primary' => false,
+                'comment' => 'Example',
                 'options' => null,
             ],
         ];

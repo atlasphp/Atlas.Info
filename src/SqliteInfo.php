@@ -85,6 +85,7 @@ class SqliteInfo extends Info
             'default' => $this->extractDefault($row['dflt_value'], $type, ! $row['notnull']),
             'autoinc' => null,
             'primary' => (bool) ($row['pk']),
+            'comment' => null,
             'options' => null,
         ];
     }

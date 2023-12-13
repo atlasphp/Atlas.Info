@@ -88,6 +88,7 @@ abstract class InfoTest extends \PHPUnit\Framework\TestCase
             'default',
             'autoinc',
             'primary',
+            'comment',
         ];
         foreach ($actualCols as $colName => $actualCol) {
             $expectCol = $expectCols[$colName];
