@@ -86,6 +86,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => true,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
             'name' => [
@@ -97,6 +98,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_size_scale' => [
@@ -108,6 +110,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_null' => [
@@ -119,6 +122,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_string' => [
@@ -130,6 +134,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => 'string',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_number' => [
@@ -141,6 +146,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => '12345',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_integer' => [
@@ -152,6 +158,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_ignore' => [
@@ -163,6 +170,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
         ];
@@ -177,6 +185,7 @@ class SqliteInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
         ];

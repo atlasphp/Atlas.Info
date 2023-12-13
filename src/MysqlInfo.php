@@ -45,6 +45,12 @@ class MysqlInfo extends Info
                 columns.column_type as _extended';
     }
 
+    protected function getCommentFieldSql(): string
+    {
+        return ',
+                columns.column_comment as _comment';
+    }
+
     protected function extractColumn(string $schema, string $table, array $def) : array
     {
         $column = parent::extractColumn($schema, $table, $def);

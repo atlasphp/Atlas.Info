@@ -62,6 +62,8 @@ abstract class Info
 
         $autoinc = $this->getAutoincSql();
         $extended = $this->getExtendedSql();
+        $commentField = $this->getCommentFieldSql();
+        $commentJoin = $this->getCommentJoinSql();
 
         $stm = "
             SELECT
@@ -81,7 +83,7 @@ abstract class Info
                 CASE
                     WHEN table_constraints.constraint_type = 'PRIMARY KEY' THEN 1
                     ELSE 0
-                END AS _primary{$extended}
+                END AS _primary{$extended}{$commentField}
             FROM information_schema.columns
                 LEFT JOIN information_schema.key_column_usage
                     ON columns.table_schema = key_column_usage.table_schema
@@ -90,7 +92,7 @@ abstract class Info
                 LEFT JOIN information_schema.table_constraints
                     ON key_column_usage.table_schema = table_constraints.table_schema
                     AND key_column_usage.table_name = table_constraints.table_name
-                    AND key_column_usage.constraint_name = table_constraints.constraint_name
+                    AND key_column_usage.constraint_name = table_constraints.constraint_name{$commentJoin}
             WHERE columns.table_schema = :schema
             AND columns.table_name = :table
             ORDER BY columns.ordinal_position
@@ -124,6 +126,7 @@ abstract class Info
             'default' => $this->extractDefault($def['_default'], $def['_type'], !$def['_notnull']),
             'autoinc' => (bool) $def['_autoinc'],
             'primary' => (bool) $def['_primary'],
+            'comment' => isset($def['_comment']) && trim($def['_comment']) !== '' ? $def['_comment'] : null,
             'options' => null,
         ];
     }
@@ -154,6 +157,16 @@ abstract class Info
     }
 
     protected function getExtendedSql() : string
+    {
+        return '';
+    }
+
+    protected function getCommentFieldSql() : string
+    {
+        return '';
+    }
+
+    protected function getCommentJoinSql() : string
     {
         return '';
     }

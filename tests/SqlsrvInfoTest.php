@@ -100,6 +100,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => true,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
             'name' => [
@@ -111,6 +112,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_size_scale' => [
@@ -122,6 +124,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_null' => [
@@ -133,6 +136,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_string' => [
@@ -144,6 +148,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => 'string',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_number' => [
@@ -155,6 +160,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => '12345',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_integer' => [
@@ -166,6 +172,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_ignore' => [
@@ -177,6 +184,7 @@ class SqlsrvInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
         ];

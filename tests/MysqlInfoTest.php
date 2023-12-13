@@ -26,7 +26,8 @@ class MysqlInfoTest extends InfoTest
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                test_enum              ENUM('foo', 'bar', 'baz')
+                test_enum              ENUM('foo', 'bar', 'baz'),
+                test_comment           VARCHAR(50) DEFAULT NULL COMMENT 'Example'
             ) ENGINE=InnoDB
         ");
 
@@ -40,7 +41,8 @@ class MysqlInfoTest extends InfoTest
                 test_default_number    NUMERIC(5) DEFAULT 12345,
                 test_default_integer   INT DEFAULT 233,
                 test_default_ignore    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                test_enum              ENUM('foo', 'bar', 'baz')
+                test_enum              ENUM('foo', 'bar', 'baz'),
+                test_comment           VARCHAR(50) DEFAULT NULL COMMENT 'Example'
             ) ENGINE=InnoDB
         ");
 
@@ -78,6 +80,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => true,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
             'name' => [
@@ -89,6 +92,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_size_scale' => [
@@ -100,6 +104,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_null' => [
@@ -111,6 +116,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_string' => [
@@ -122,6 +128,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => 'string',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_number' => [
@@ -133,6 +140,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => '12345',
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_integer' => [
@@ -144,6 +152,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => 233,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_default_ignore' => [
@@ -155,6 +164,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => null,
             ],
             'test_enum' => [
@@ -166,7 +176,20 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => false,
+                'comment' => null,
                 'options' => ['foo', 'bar', 'baz'],
+            ],
+            'test_comment' => [
+                'name' => 'test_comment',
+                'type' => 'varchar',
+                'size' => 50,
+                'scale' => null,
+                'notnull' => false,
+                'default' => null,
+                'autoinc' => false,
+                'primary' => false,
+                'comment' => 'Example',
+                'options' => null,
             ],
         ];
         $issue3Columns = [
@@ -179,6 +202,7 @@ class MysqlInfoTest extends InfoTest
                 'default' => null,
                 'autoinc' => false,
                 'primary' => true,
+                'comment' => null,
                 'options' => null,
             ],
         ];
